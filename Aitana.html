@@ -1,0 +1,478 @@
+● <!-- Hecho con amor para Aitana por Nikol 💜 -->  m             es-CO')
+  <!DOCTYPE html>                                                                     ─
+  <html lang="es-CO">
+  <head>
+    <meta charset="UTF-8">
+    <title>💜 Recordatorio de Inyecciones de Aitana 💜</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Pac
+  ifico&display=swap"
+          rel="stylesheet">
+    <style>
+      :root {
+        --p1:#1a0033;  /* darkest */
+        --p2:#2d0057;
+        --p3:#6b21a8;
+        --p4:#a855f7;
+        --p5:#d8b4fe;
+        --p6:#f3e8ff;  /* lightest */
+        --bg:#f3e8ff;
+        --accent:#a855f7;
+      }
+
+      * { box-sizing:border-box; margin:0; padding:0; }
+      body{
+        font-family:'Nunito',sans-serif;
+        background:var(--bg);
+        color:#2d0057;
+        overflow-x:hidden;
+      }
+      h1{
+        font-family:'Pacifico',cursive;
+        text-align:center;
+        margin:1rem 0;
+        font-size:2rem;
+        color:var(--p4);
+        animation:fadeSlide 1s ease forwards;
+      }
+      @keyframes fadeSlide{
+        from{opacity:0;transform:translateY(-20px);}
+        to{opacity:1;transform:none;}
+      }
+
+      /* ---- calendar ---- */
+      .calendar{
+        max-width:800px;
+        margin:0 auto;
+        padding:1rem;
+      }
+      .cal-header{
+
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;
+      }
+      .nav{
+        background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--p3);
+      }
+      .month{
+        font-weight:600;font-size:1.2rem;color:var(--p2);
+      }
+      .grid{
+        display:grid;
+        grid-template-columns:repeat(7,1fr);
+        gap:.3rem;
+      }
+      .cell{
+        position:relative;
+        background:linear-gradient(135deg,var(--p5),var(--p6));
+        border-radius:.5rem;
+        padding:.4rem;
+        min-height:70px;
+        cursor:pointer;
+        overflow:hidden;
+        transition:transform .2s;
+      }
+      .cell:hover{transform:scale(1.03);}
+      .cell.today{
+        box-shadow:0 0 10px 4px var(--p4);
+        animation:pulse 2s infinite;
+      }
+      @keyframes pulse{
+        0%,100%{box-shadow:0 0 10px 4px var(--p4);}
+        50%{box-shadow:0 0 20px 8px var(--p4);}
+      }
+      .cell.disabled{opacity:.3;pointer-events:none;}
+      .date-num{font-weight:600;color:#1a0033;}
+      .dose-indicator{
+        font-size:.7rem;
+        margin-top:.2rem;
+        display:flex;gap:.2rem;
+      }
+      .dose-indicator span{
+        opacity:.5;
+      }
+      .checked .dose-indicator span{opacity:1;}
+      .checked::after{
+        content:"\2713";
+        position:absolute;right:4px;top:4px;
+        font-size:1.2rem;color:#0f0;
+      }
+      .half-checked::after{
+        content:"\2713";
+        position:absolute;right:4px;top:4px;
+        font-size:1.2rem;color:#0f0;
+        opacity:.5;
+      }
+
+      /* ---- modal ---- */
+      .modal{
+        position:fixed;top:0;left:0;width:100vw;height:100vh;
+        background:rgba(0,0,0,.4);
+        backdrop-filter:blur(4px);
+        display:flex;justify-content:center;align-items:center;
+        opacity:0;pointer-events:none;transition:opacity .3s;
+      }
+      .modal.show{opacity:1;pointer-events:auto;}
+      .modal-content{
+        background:#fff;
+        border-radius:.8rem;
+        width:90%;max-width:500px;
+        max-height:90vh;
+        overflow:auto;
+        padding:1rem;
+        position:relative;
+      }
+      .close{
+        position:absolute;top:.5rem;right:.5rem;
+        background:none;border:none;font-size:1.5rem;cursor:pointer;
+      }
+      .phrase{
+        background:var(--p5);
+        border-radius:.5rem;
+        padding:.5rem;
+        margin:1rem 0;
+        position:relative;
+        animation:bob 8s ease-in-out infinite;
+      }
+      @keyframes bob{
+        0%,100%{transform:translateY(0);}
+        50%{transform:translateY(-5px);}
+      }
+      .card{
+        border:2px solid var(--p3);
+        border-radius:.5rem;
+        padding:1rem;
+        margin:.5rem 0;
+        display:flex;align-items:center;gap:.5rem;
+        cursor:pointer;
+        transition:background .3s,color .3s;
+      }
+      .card.checked{
+        background:var(--p3);
+        color:#fff;
+      }
+      .card .icon{font-size:1.5rem;}
+      .heart-burst{
+        position:absolute;
+        width:20px;height:20px;
+        pointer-events:none;
+        animation:fly .8s forwards;
+      }
+      @keyframes fly{
+        from{opacity:1;transform:scale(1) translate(0,0);}
+        to{opacity:0;transform:scale(.5) translate(var(--dx),var(--dy));}
+      }
+
+      /* ---- background hearts & sparkles ---- */
+      .spark{
+        position:fixed;top:0;left:0;width:100%;height:100%;
+        pointer-events:none;overflow:hidden;
+      }
+      .spark div{
+        position:absolute;
+        width:8px;height:8px;
+        background:radial-gradient(circle,var(--p4),transparent);
+        border-radius:50%;
+        animation:float 6s linear infinite;
+      }
+      @keyframes float{
+        0%{transform:translateY(100vh) scale(0);}
+        50%{transform:translateY(50vh) scale(1);}
+        100%{transform:translateY(-10vh) scale(0);}
+      }
+
+      /* ---- animals ---- */
+      .animal{
+        position:absolute; width:80px; height:auto;
+        animation:floaty 3s ease-in-out infinite;
+      }
+      @keyframes floaty{
+        0%,100%{transform:translateY(0);}
+        50%{transform:translateY(-10px);}
+      }
+      #bunny{bottom:10%; left:5%;}
+      #bear{bottom:5%; right:5%;}
+      #cat{top:8%; left:50%; transform:translateX(-50%);}
+      #elephant{top:30%; left:20%;}
+    </style>
+  </head>
+  <body>
+    <!-- Mascot -->
+    <svg id="bunny" class="animal" viewBox="0 0 64 64" fill="var(--p4)">
+      <circle cx="32" cy="32" r="30"/>
+      <ellipse cx="32" cy="32" rx="20" ry="25" fill="var(--p5)"/>
+      <circle cx="24" cy="28" r="2"/>
+      <circle cx="40" cy="28" r="2"/>
+      <path d="M28,44 q4,6 8,0" stroke="var(--p2)" stroke-width="2" fill="none"/>
+      <path d="M20,12 q12,-8 24,0" stroke="var(--p2)" stroke-width="2" fill="none"/>
+    </svg>
+
+    <h1>💜 Recordatorio de Inyecciones de Aitana 💜</h1>
+
+    <div class="calendar">
+      <div class="cal-header">
+        <button class="nav" id="prev">&lt;</button>
+        <div class="month" id="monthName"></div>
+        <button class="nav" id="next">&gt;</button>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <!-- modal -->
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <button class="close" id="closeModal">&times;</button>
+        <h2 id="modalDate"></h2>
+        <div class="phrase" id="modalPhrase"></div>
+        <div class="card" data-dose="am">
+          <span class="icon">☀️</span>
+          <span>💉 Inyección 10:00 AM</span>
+        </div>
+        <div class="card" data-dose="pm">
+          <span class="icon">🌙</span>
+          <span>💉 Inyección 10:00 PM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- background sparkles -->
+    <div class="spark" id="sparkles"></div>
+
+    <!-- Other animals (decorative) -->
+    <svg id="bear" class="animal" viewBox="0 0 64 64" fill="var(--p3)">
+      <circle cx="32" cy="32" r="30"/>
+      <ellipse cx="32" cy="32" rx="22" ry="28" fill="var(--p4)"/>
+      <circle cx="24" cy="28" r="2"/>
+      <circle cx="40" cy="28" r="2"/>
+    </svg>
+
+    <svg id="cat" class="animal" viewBox="0 0 64 64" fill="var(--p5)">
+      <polygon points="32,5 45,30 19,30"/>
+      <circle cx="32" cy="38" r="20"/>
+      <circle cx="24" cy="30" r="2"/>
+      <circle cx="40" cy="30" r="2"/>
+      <path d="M28,45 q4,6 8,0" stroke="var(--p2)" stroke-width="2" fill="none"/>
+      <path d="M20,12 q12,-8 24,0" stroke="var(--p2)" stroke-width="2" fill="none"/>
+    </svg>
+
+    <svg id="elephant" class="animal" viewBox="0 0 64 64" fill="var(--p2)">
+      <circle cx="32" cy="32" r="30"/>
+      <ellipse cx="32" cy="32" rx="18" ry="24" fill="var(--p4)"/>
+      <circle cx="24" cy="28" r="2"/>
+      <circle cx="40" cy="28" r="2"/>
+      <path d="M30,45 q4,6 8,0" stroke="var(--p1)" stroke-width="2" fill="none"/>
+    </svg>
+
+    <script>
+      /* --------- data --------- */
+      const start = new Date('2026-05-01');
+      const end   = new Date('2027-01-01');
+      const phrases = [
+        "Te amodoro 💜","Te adoroamo 🐾","Abrazame para siempre 🫂","Te amo musho 💜",
+        "Te quiero mucho 🌸","Te kiero 🐰","Dame besitos (Nikol) 💋","Te kiero morder 🐾",
+        "Kiero pasar mi vida contigo 💜","Durmamos abrazaditos 🌙","Tengo más de 100mil razones para quedarme contigo ✨",
+        "Kédate para siempre 💜","Me encantan tus ojos 👀","Me encanta tu pelo 🌸","Me encanta tu nariz 🐰",
+        "Me encantan tus piernas 💜","Me encanta tu boca 💋","Me encantan tus cejas ✨","Me encantas 💜","Te extrañio 🌙"
+      ];
+
+      const storageKey = 'aitana_injections';
+      let data = {};
+
+      // --------- helpers ---------
+      function loadData(){
+        const raw = localStorage.getItem(storageKey);
+        if (raw) data = JSON.parse(raw);
+      }
+      function saveData(){
+        localStorage.setItem(storageKey, JSON.stringify(data));
+      }
+      function fmt(date){ return date.toISOString().split('T')[0]; }
+      function getDayInfo(dateStr){
+        return data[dateStr]||{am:false,pm:false};
+      }
+      function setDayInfo(dateStr, dose, val){
+        if(!data[dateStr]) data[dateStr]={am:false,pm:false};
+        data[dateStr][dose]=val;
+        saveData();
+      }
+      function dayOfYear(date){
+        const start = new Date(date.getFullYear(),0,0);
+        return Math.floor((date - start) / 86400000);
+      }
+      function phrasesFor(date){
+        const idx = dayOfYear(date) % phrases.length;
+        return [phrases[idx], phrases[(idx+3)%phrases.length]];
+      }
+
+      // --------- calendar ---------
+      const grid = document.getElementById('grid');
+      const monthName = document.getElementById('monthName');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+
+      let viewDate = new Date(start);
+      function renderCalendar(){
+        grid.innerHTML='';
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+        monthName.textContent =
+  viewDate.toLocaleDateString('es-CO',{month:'long',year:'numeric'});
+
+        const first = new Date(year, month, 1);
+        const startDay = (first.getDay()+6)%7; // Monday=0
+        const daysInMonth = new Date(year, month+1, 0).getDate();
+
+        // fill blank cells
+        for(let i=0;i<startDay;i++){
+          const empty = document.createElement('div');
+          empty.className='cell disabled';
+          grid.appendChild(empty);
+        }
+
+        for(let d=1; d<=daysInMonth; d++){
+          const date = new Date(year, month, d);
+          const iso = fmt(date);
+          const info = getDayInfo(iso);
+          const cell = document.createElement('div');
+          cell.className='cell';
+          if(date.toDateString()===new Date().toDateString())
+  cell.classList.add('today');
+          if(info.am && info.pm) cell.classList.add('checked');
+          else if(info.am || info.pm) cell.classList.add('half-checked');
+
+          cell.innerHTML = `
+            <div class="date-num">${d}</div>
+            <div class="dose-indicator">
+              <span>${info.am?'💉':''}</span>
+              <span>${info.pm?'💉':''}</span>
+            </div>`;
+          cell.dataset.iso=iso;
+          cell.addEventListener('click',()=>openModal(date));
+          grid.appendChild(cell);
+        }
+
+        // navigation limits
+        prevBtn.disabled = viewDate <= start;
+        nextBtn.disabled = viewDate >= end;
+      }
+      prevBtn.onclick=()=>{ viewDate.setMonth(viewDate.getMonth()-1); renderCalendar();
+   };
+      nextBtn.onclick=()=>{ viewDate.setMonth(viewDate.getMonth()+1); renderCalendar();
+   };
+
+      // --------- modal ---------
+      const modal = document.getElementById('modal');
+      const modalDate = document.getElementById('modalDate');
+      const modalPhrase = document.getElementById('modalPhrase');
+      const closeModal = document.getElementById('closeModal');
+      let activeDate=null;
+
+      function openModal(date){
+        activeDate = date;
+        const iso = fmt(date);
+        const info = getDayInfo(iso);
+        modalDate.textContent = date.toLocaleDateString('es-CO',{weekday:'long',
+  day:'numeric', month:'long', year:'numeric'});
+        const [p1,p2]=phrasesFor(date);
+        modalPhrase.textContent = `${p1} ${p2}`;
+        // set card states
+        document.querySelectorAll('.card').forEach(card=>{
+          const dose = card.dataset.dose;
+          const checked = info[dose];
+          card.classList.toggle('checked',checked);
+        });
+        modal.classList.add('show');
+      }
+      closeModal.onclick=()=>modal.classList.remove('show');
+      modal.addEventListener('click',e=>{ if(e.target===modal)
+  modal.classList.remove('show'); });
+
+      // checkbox cards
+      document.querySelectorAll('.card').forEach(card=>{
+        card.addEventListener('click',()=>{
+          const dose = card.dataset.dose;
+          const iso = fmt(activeDate);
+          const prev = getDayInfo(iso)[dose];
+          setDayInfo(iso,dose,!prev);
+          card.classList.toggle('checked',!prev);
+          renderCalendar(); // update cell checks
+          heartBurst(card);
+          // temporary big love text
+          const love = document.createElement('div');
+          love.textContent='Te amo 💜';
+          love.style.position='fixed';
+          love.style.top='50%';
+          love.style.left='50%';
+          love.style.transform='translate(-50%,-50%)';
+          love.style.fontSize='2rem';
+          love.style.fontFamily="'Pacifico',cursive";
+          love.style.color='var(--p4)';
+          love.style.zIndex=1000;
+          love.style.opacity=1;
+          love.style.transition='opacity .5s';
+          document.body.append(love);
+          setTimeout(()=>love.remove(),1500);
+        });
+      });
+
+      // heart burst animation
+      function heartBurst(origin){
+        const rect = origin.getBoundingClientRect();
+        const colors = ['#ff69b4','#ff1493','#db70ff'];
+        for(let i=0;i<8;i++){
+          const el = document.createElement('div');
+          el.className='heart-burst';
+          el.textContent='❤️';
+          el.style.left = (rect.left+rect.width/2)+'px';
+          el.style.top  = (rect.top+rect.height/2)+'px';
+          const angle = (i/8)*2*Math.PI;
+          const distance = 40;
+          el.style.setProperty('--dx', `${Math.cos(angle)*distance}px`);
+          el.style.setProperty('--dy', `${Math.sin(angle)*distance}px`);
+          el.style.color = colors[i%colors.length];
+          document.body.append(el);
+          el.addEventListener('animationend',()=>el.remove());
+        }
+      }
+
+      // --------- sparkles background ----------
+      const spark = document.getElementById('sparkles');
+      for(let i=0;i<30;i++){
+        const dot = document.createElement('div');
+        dot.style.left = Math.random()*100+'%';
+        dot.style.top = Math.random()*100+'%';
+        dot.style.animationDuration = (3+Math.random()*3)+'s';
+        spark.append(dot);
+      }
+
+      // --------- notifications ----------
+      function scheduleNotifications(){
+        if (!('Notification' in window)) return;
+        Notification.requestPermission().then(p=>{
+          if(p!=='granted') return;
+          const now = new Date();
+          const todayStr = fmt(now);
+          const todayInfo = getDayInfo(todayStr);
+          const schedule = (hour, doseKey, text)=>{
+            const target = new Date(now);
+            target.setHours(hour,0,0,0);
+            if (target<=now) target.setDate(target.getDate()+1);
+            const iso = fmt(target);
+            const info = getDayInfo(iso);
+            if(info[doseKey]) return; // already done
+            const delay = target - now;
+            setTimeout(()=>new Notification(text), delay);
+          };
+          schedule(10,'am',`💜 Aitana, hora de tu inyección de las 10 AM! Te amo musho
+  💉`);
+          schedule(22,'pm',`💜 Aitana, hora de tu inyección de las 10 PM! Dame besitos
+  💉`);
+        });
+      }
+
+      // --------- init ----------
+      loadData();
+      renderCalendar();
+      scheduleNotifications();
+    </script>
+  </body>
+  </html>
